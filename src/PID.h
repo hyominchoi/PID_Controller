@@ -2,6 +2,7 @@
 #define PID_H
 
 class PID {
+
 public:
   /*
   * Errors
@@ -17,6 +18,12 @@ public:
   double Ki;
   double Kd;
 
+    /* Twiddle coefficients dps */
+    double dp[3];
+    double twiddle_total_error = 0.;
+    double TwiddleUpdateError(double cte);
+    int num_steps;
+    
   /*
   * Constructor
   */
@@ -41,6 +48,10 @@ public:
   * Calculate the total PID error.
   */
   double TotalError();
+    
+    double UpdateSteerAngle(double cte);
+    
+
 };
 
 #endif /* PID_H */
