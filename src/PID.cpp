@@ -1,4 +1,5 @@
 #include "PID.h"
+#include <iostream>
 
 using namespace std;
 
@@ -14,13 +15,24 @@ void PID::Init(double Kp, double Ki, double Kd) {
     PID::Kp = Kp;
     PID::Ki = Ki;
     PID::Kd = Kd;
+    K[0] = Kp;
+    K[1] = Ki;
+    K[2] = Kd;
     p_error = 0.;
     i_error = 0.;
     d_error = 0.;
     /* Twiddle coefficients */
-    dp[0] = Kp * 0.1;
+    dp[0] = Kp * 0.01;
     dp[1] = Ki * 0.1;
-    dp[2] = Kd * 0.1;
+    dp[2] = Kd * 0.05;
+    
+    twiddle_flag[0] = 1;
+    twiddle_flag[1] = 1;
+    twiddle_flag[2] = 1;
+    num_steps = 0;
+    num_reset_period = 100;
+    twiddle_current_error = 0.;
+    twiddle_best_error = 1000.;
 }
 
 void PID::UpdateError(double cte) {
@@ -32,95 +44,47 @@ void PID::UpdateError(double cte) {
 }
 
 double PID::TotalError() {
-    return p_error;
+    return twiddle_current_error;
 }
+
 
 double PID::UpdateSteerAngle(double cte) {
     UpdateError(cte);
+    num_steps += 1;
     double steer_angle = -Kp * p_error - Ki * i_error - Kd * d_error;
+    
+    if (num_steps % num_reset_period >= num_reset_period/2) {
+        twiddle_current_error += cte * cte /num_reset_period;
+    }
+    
+    if (num_steps % num_reset_period == 0) {
+        //std::cout << num_steps;
+        int param_index = (num_steps % (3 * num_reset_period))/num_reset_period;
+
+        cout << "param_index " << param_index << endl ;
+        if (twiddle_current_error < twiddle_best_error){
+            twiddle_best_error = twiddle_current_error;
+            twiddle_flag[param_index] = true;
+            K[param_index] += dp[param_index];
+        }
+        else {
+            if (twiddle_flag[param_index] == true) {
+                K[param_index] -= 2 * dp[param_index];
+                twiddle_flag[param_index] = false;
+            }
+            else {
+                K[param_index] += dp[param_index];
+                dp[param_index] *= 0.9;
+                twiddle_flag[param_index] = false;
+            }
+        }
+        twiddle_current_error = 0.;
+    }
+    
+
     return steer_angle;
 
 }
-
-double PID::TwiddleUpdateError(double cte) {
-
-    double steer_angle = UpdateSteerAngle(cte);
-    if (num_steps%200 >= 100) {
-        twiddle_total_error += cte * cte;
-    }
-    
-    if (num_steps%200 == 0) {
-        twiddle_total_error = twiddle_total_error/200;
-    }
-    return steer_angle;
-}
-
-/*
-void PID::Twiddle(double cte, int num_steps) {
-    
-    while(dp[0] > 0.001) {
-        Kp += dp[0];
-        double err =
-    }
-}
-
-def twiddle(tol=0.2):
- # Don't forget to call `make_robot` before every call of `run`!
- p = [0, 0, 0]
- dp = [1, 1, 1]
- robot = make_robot()
- x_trajectory, y_trajectory, best_err = run(robot, p)
- 
- while (sum(dp) > tol):
- for i in range(len(p)):
- p[i] += dp[i]
- robot = make_robot()
- x_trajectory, y_trajectory, err = run(robot, p)
- if err < best_err:
- print(i, 1)
- dp[i] *= 1.1
- best_err = err
- else:
- p[i] -= 2*dp[i]
- robot = make_robot()
- x_trajectory, y_trajectory, err = run(robot, p)
- if err < best_err:
- print(i, 2)
- best_err = err
- dp[i] *= 1.1
- else:
- print(i, 3)
- p[i] += dp[i]
- dp[i] *= 0.9
- return p, best_err
- 
-*/
- 
-/*
-def run(robot, params, n=100, speed=1.0):
-x_trajectory = []
-y_trajectory = []
-err = 0
-prev_cte = robot.y
-int_cte = 0
-for i in range(2 * n):
-cte = robot.y
-diff_cte = cte - prev_cte
-int_cte += cte
-prev_cte = cte
-steer = -params[0] * cte - params[1] * diff_cte - params[2] * int_cte
-robot.move(steer, speed)
-x_trajectory.append(robot.x)
-y_trajectory.append(robot.y)
-if i >= n:
-err += cte ** 2
-return x_trajectory, y_trajectory, err / n
- */
-
-
-// Parameter fitting helper functions
-/* Twiddle method */
-
 
 
 
