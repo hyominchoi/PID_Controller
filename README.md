@@ -1,8 +1,20 @@
-# CarND-Controls-PID
-Self-Driving Car Engineer Nanodegree Program
+# PID-Controller 
+Implement a PID controller in C++ to maneuver the vehicle around the track on simulator provided by
+Udacity Self-Driving Car Engineering Nanodegree Program. 
 
----
+-- 
+## Reflection
+I (Hyomin Choi) changed and wrote source codes (src/main.cpp, PID.h, PID.cpp). To find PID algorithm parameters, ( **Kp**, **Ki**, **Kd**), I implemented a modified Twiddle algorithm. 
 
+1. To find a starting point, I let throttle be 0.1 (very small) and found a working value for **Kp**, 0.5. 
+2. I let the initial **Kp**, **Ki**, **Kd** be 0.5, 0.0001, 0.0001, respectively.
+3. I ran the simulator with the above initial parameters and ran the modified-Twiddle function with a throttle value of 0.2. 
+  * The algorithm updates one of three parameters **Kp**, **Ki**, and **Kd** every 200 data intake, or steps. However, the algorithm does not have a tolerance value.
+4. I found out that the car's steering angle *osciallated* too much, which meant that the **Kd** had te be increased. Hence, I let **Kd = 0.3**. In addition, I let the update happens every 100 steps instead of 200 steps, to reduce the osillation. I let the simulator run for a while, monitoring the changes in parameter values
+
+
+
+--
 ## Dependencies
 
 * cmake >= 3.5
@@ -59,10 +71,6 @@ More information is only accessible by people who are already enrolled in Term 2
 of CarND. If you are enrolled, see [the project page](https://classroom.udacity.com/nanodegrees/nd013/parts/40f38239-66b6-46ec-ae68-03afd8a601c8/modules/f1820894-8322-4bb3-81aa-b26b3c6dcbaf/lessons/e8235395-22dd-4b87-88e0-d108c5e5bbf4/concepts/6a4d8d42-6a04-4aa6-b284-1697c0fd6562)
 for instructions and the project rubric.
 
-## Hints!
-
-* You don't have to follow this directory structure, but if you do, your work
-  will span all of the .cpp files here. Keep an eye out for TODOs.
 
 ## Call for IDE Profiles Pull Requests
 
@@ -93,6 +101,4 @@ that's just a guess.
 One last note here: regardless of the IDE used, every submitted project must
 still be compilable with cmake and make./
 
-## How to write a README
-A well written README file can enhance your project and portfolio.  Develop your abilities to create professional README files by completing [this free course](https://www.udacity.com/course/writing-readmes--ud777).
 

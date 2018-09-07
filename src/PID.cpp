@@ -12,27 +12,27 @@ PID::PID() {}
 PID::~PID() {}
 
 void PID::Init(double Kp, double Ki, double Kd) {
-    PID::Kp = Kp;
-    PID::Ki = Ki;
-    PID::Kd = Kd;
-    K[0] = Kp;
-    K[1] = Ki;
-    K[2] = Kd;
-    p_error = 0.;
-    i_error = 0.;
-    d_error = 0.;
-    /* Twiddle coefficients */
-    dp[0] = Kp * 0.01;
-    dp[1] = Ki * 0.1;
-    dp[2] = Kd * 0.05;
+  PID::Kp = Kp;
+  PID::Ki = Ki;
+  PID::Kd = Kd;
+  K[0] = Kp;
+  K[1] = Ki;
+  K[2] = Kd;
+  p_error = 0.;
+  i_error = 0.;
+  d_error = 0.;
+  /* Twiddle coefficients */
+  dp[0] = Kp * 0.01;
+  dp[1] = Ki * 0.1;
+  dp[2] = Kd * 0.05;
     
-    twiddle_flag[0] = 1;
-    twiddle_flag[1] = 1;
-    twiddle_flag[2] = 1;
-    num_steps = 0;
-    num_reset_period = 100;
-    twiddle_current_error = 0.;
-    twiddle_best_error = 1000.;
+  twiddle_flag[0] = 1;
+  twiddle_flag[1] = 1;
+  twiddle_flag[2] = 1;
+  num_steps = 0;
+  num_reset_period = 100;
+  twiddle_current_error = 0.;
+  twiddle_best_error = 1000.;
 }
 
 void PID::UpdateError(double cte) {

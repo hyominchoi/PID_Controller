@@ -14,18 +14,18 @@ public:
   /*
   * Coefficients
   */
-    double K[3];
-    double Kp;
-    double Ki;
-    double Kd;
+  double K[3];
+  double Kp;
+  double Ki;
+  double Kd;
     
-    /* Twiddle coefficients dps */
-    double dp[3];
-    double twiddle_current_error;
-    double twiddle_best_error;
-    int num_reset_period;
-    int num_steps;
-    bool twiddle_flag[3];
+  /* Twiddle coefficients dps */
+  double dp[3];
+  double twiddle_current_error;
+  double twiddle_best_error;
+  int num_reset_period;
+  int num_steps;
+  bool twiddle_flag[3];
     
   /*
   * Constructor
@@ -52,9 +52,12 @@ public:
   */
   double TotalError();
     
-    double UpdateSteerAngle(double cte);
+  double UpdateSteerAngle(double cte);
     
 
 };
+
+
+
 
 #endif /* PID_H */
