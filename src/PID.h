@@ -19,14 +19,6 @@ public:
   double Ki;
   double Kd;
     
-  /* Twiddle coefficients dps */
-  double dp[3];
-  double twiddle_current_error;
-  double twiddle_best_error;
-  int num_reset_period;
-  int num_steps;
-  bool twiddle_flag[3];
-    
   /*
   * Constructor
   */
@@ -40,7 +32,7 @@ public:
   /*
   * Initialize PID.
   */
-  void Init(double Kp, double Ki, double Kd);
+  virtual void Init(double Kp, double Ki, double Kd);
 
   /*
   * Update the PID error variables given cross track error.
@@ -52,12 +44,29 @@ public:
   */
   double TotalError();
     
-  double UpdateSteerAngle(double cte);
+  virtual double UpdateSteerAngle(double cte);
     
 
 };
 
 
-
+class PID_CALIBRATE : public PID {
+public:
+  PID_CALIBRATE();
+  ~PID_CALIBRATE();
+  /* Twiddle coefficients dps */
+  double dp[3];
+  double twiddle_current_error;
+  double twiddle_best_error[3];
+  int num_reset_period;
+  int num_steps;
+  
+  void Init(double Kp, double Ki, double Kd);
+  /* update steering angle and update parameters */
+  double UpdateSteerAngle(double cte);
+private:
+  bool twiddle_flag[3];
+  
+};
 
 #endif /* PID_H */
