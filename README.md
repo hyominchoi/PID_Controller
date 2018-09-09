@@ -28,7 +28,7 @@ The author changed and wrote source codes (src/main.cpp, PID.h, PID.cpp). To fin
   * This modified Twiddle algorithm does not have a tolerance value. It keeps updating the parameters.
 4. I found out that the car's steering angle *osciallated* too much, which indicated the value of **Kd** was not large enough. Hence, I let **Kd = 0.3** and gradually increased the value. In addition, I let the update happens every 100 steps instead of 200 steps, to reduce the osillation frequency while calibrating. I ran the simulator many times, monitoring and updating the parameter values.
 5. Finally, I observed that **Kd** is stable around **60**. Similarly, I observed that **Kp = 1.** and **Ki = 0.01**.
---
+------
 
 ## Dependencies
 
