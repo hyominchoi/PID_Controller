@@ -33,7 +33,8 @@ int main() {
 
   // calibration mode:
   // To Calibrate the parameters, use PID_CALIBRATE class
-  PID_CALIBRATE pid;
+  
+  // PID_CALIBRATE pid_cal;
   
   // drive mode
   PID pid;
@@ -54,8 +55,8 @@ int main() {
           double angle = std::stod(j[1]["steering_angle"].get<std::string>());
           double steer_value = pid.UpdateSteerAngle(cte);
           //debug //
-          std::cout << "CTE: " << cte << " Steering Value: " << steer_value <<" K value " << pid.K[0] << " " << pid.K[1] << " " << pid.K[2] << std::endl ;
-          
+          std::cout << "CTE: " << cte << " Steering Value: " << steer_value << std::endl ;
+        
           json msgJson;
           msgJson["steering_angle"] = steer_value;
           msgJson["throttle"] = 0.3;
