@@ -52,19 +52,47 @@ public:
 
 class PID_CALIBRATE : public PID {
 public:
+  /* 
+  * Constructor
+  */
   PID_CALIBRATE();
+  
+  /*
+  * Destructor
+  */
   ~PID_CALIBRATE();
-  /* Twiddle coefficients dps */
+  
+  /* 
+  * Twiddle coefficients dps 
+  */
   double dp[3];
-  double twiddle_current_error;
+  
+  /* 
+  * best error for each P,I,D coefficients
+  */
   double twiddle_best_error[3];
+  double twiddle_current_error;
+  
+  /* 
+  * counters 
+  */
   int num_reset_period;
   int num_steps;
   
+  /* 
+  * Initialize PID_CALIBRATE
+  */
   void Init(double Kp, double Ki, double Kd);
-  /* update steering angle and update parameters */
+  
+  /* 
+  * update steering angle and update parameters 
+  */
   double UpdateSteerAngle(double cte);
-private:
+
+  private:
+  /* 
+  * keeps track of errors from previous iteration 
+  */
   bool twiddle_flag[3];
   
 };
