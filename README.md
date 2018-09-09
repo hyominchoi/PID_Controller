@@ -5,7 +5,7 @@ Udacity Self-Driving Car Engineering Nanodegree Program.
 
 ## Reflection
 
-The author changed and wrote source codes (src/main.cpp, PID.h, PID.cpp). To find PID parameters, (**Kp**, **Ki**, **Kd**), I implemented a modified Twiddle algorithm. 
+I, @hyominchoi, changed and wrote source codes (src/main.cpp, PID.h, PID.cpp). To find PID parameters, (**Kp**, **Ki**, **Kd**), I implemented a modified Twiddle algorithm. 
 
 ### Notes on source code
 
