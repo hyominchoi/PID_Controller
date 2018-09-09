@@ -18,7 +18,9 @@ public:
   double Kp;
   double Ki;
   double Kd;
-    
+  double throttle;
+  double steer_angle;
+  
   /*
   * Constructor
   */
@@ -45,7 +47,8 @@ public:
   double TotalError();
     
   virtual double UpdateSteerAngle(double cte);
-    
+  
+  void AdjustThrottle(double s1, double s2);
 
 };
 

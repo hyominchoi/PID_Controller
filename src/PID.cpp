@@ -21,23 +21,34 @@ void PID::Init(double Kp, double Ki, double Kd) {
   p_error = 0.;
   i_error = 0.;
   d_error = 0.;
+  throttle = 0.3;
+  steer_angle = 0.;
 }
 
 void PID::UpdateError(double cte) {
-    double previous_cte = p_error;
-    p_error =  cte;
-    i_error += cte;
-    d_error = (cte - previous_cte);
-    
+  double previous_cte = p_error;
+  p_error =  cte;
+  i_error += cte;
+  d_error = (cte - previous_cte);
+
 }
 
 double PID::TotalError() {
     return p_error;
 }
 
+void PID::AdjustThrottle(double s1, double s2) {
+  if (s1 * s2 < 0) throttle = max(0.1, throttle - 0.03);
+  else if (p_error > 0.7 || p_error < -0.7) throttle = max(0.1, throttle - 0.03);
+  else throttle = min(0.35, throttle + 0.03);
+}
+
 double PID::UpdateSteerAngle(double cte) {
   UpdateError(cte);
-  double steer_angle = -Kp * p_error - Ki * i_error - Kd * d_error;
+  double new_steer_angle = -Kp * p_error - Ki * i_error - Kd * d_error;
+  // Adjust Throttle depending on steering angle
+  AdjustThrottle(steer_angle, new_steer_angle);
+  steer_angle = new_steer_angle;
   return steer_angle;
 }
 
@@ -55,6 +66,7 @@ void PID_CALIBRATE::Init(double Kp, double Ki, double Kd) {
   p_error = 0.;
   i_error = 0.;
   d_error = 0.;
+  throttle = 0.3;
   /* Twiddle coefficients */
   dp[0] = Kp * 0.01;
   dp[1] = Ki * 0.1;
@@ -109,7 +121,6 @@ double PID_CALIBRATE::UpdateSteerAngle(double cte) {
     // reset twiddle error
     twiddle_current_error = 0.;
   }
-    
 
     return steer_angle;
 
