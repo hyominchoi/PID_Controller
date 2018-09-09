@@ -5,10 +5,11 @@ Udacity Self-Driving Car Engineering Nanodegree Program.
 
 ## Reflection
 
+The author changed and wrote source codes (src/main.cpp, PID.h, PID.cpp). To find PID parameters, (**Kp**, **Ki**, **Kd**), I implemented a modified Twiddle algorithm. 
+
 ### Notes on source code
 
-I (Hyomin Choi) changed and wrote source codes (src/main.cpp, PID.h, PID.cpp). To find PID algorithm parameters, (**Kp**, **Ki**, **Kd**), I implemented a modified Twiddle algorithm. 
-  * The `PID` class has a derived class called `PID_CALIBRATE`. Both `PID_CALIBRATE` and `PID` class objects compute steering angles of the car within the simulator. The drived class `PID_CALIBRATE` runs calibration algorithm and updates the parameters.
+  * `PID.cpp` and `PID.h`: The newly written `PID` class has a derived class called `PID_CALIBRATE`. Both `PID_CALIBRATE` and `PID` class objects compute steering angles of the car within the simulator. The drived class `PID_CALIBRATE` runs calibration algorithm and updates the parameters.
   * One can choose one of these two classes in `main.cpp` L36.
    ```
   // calibration mode
@@ -25,10 +26,8 @@ I (Hyomin Choi) changed and wrote source codes (src/main.cpp, PID.h, PID.cpp). T
 3. I ran the simulator with the above initial parameters and ran the modified-Twiddle function with a throttle value of 0.2. 
   * The algorithm updates one of three parameters **Kp**, **Ki**, and **Kd** every 200 data intake, or steps. 
   * This modified Twiddle algorithm does not have a tolerance value. It keeps updating the parameters.
-4. I found out that the car's steering angle *osciallated* too much, which meant that the **Kd** had te be increased. Hence, I let **Kd = 0.3** and gradually increased the value over many iterations. In addition, I let the update happens every 100 steps instead of 200 steps, to reduce the osillation frequency while calibrating. I let the simulator run for a while, monitoring the changes in parameter values.
-5. Finally, I observed that **Kd** is stable around **60.0**. Similarly, I observed that **Kp = 1.** and **Ki = 0.01**.
-
-
+4. I found out that the car's steering angle *osciallated* too much, which indicated the value of **Kd** was not large enough. Hence, I let **Kd = 0.3** and gradually increased the value. In addition, I let the update happens every 100 steps instead of 200 steps, to reduce the osillation frequency while calibrating. I ran the simulator many times, monitoring and updating the parameter values.
+5. Finally, I observed that **Kd** is stable around **60**. Similarly, I observed that **Kp = 1.** and **Ki = 0.01**.
 --
 
 ## Dependencies
